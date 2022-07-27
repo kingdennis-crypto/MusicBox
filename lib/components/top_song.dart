@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:musicbox/music_detail.dart';
 
@@ -19,6 +21,22 @@ class TopSong extends StatefulWidget {
 
 class _TopSongState extends State<TopSong> {
   Color placeColor = Colors.black;
+
+  var menuItems = <String>['Play', 'Add to waitlist', 'Save'];
+
+  void onSelectMenu(item) {
+    switch (item) {
+      case 'Play':
+        print('Play');
+        break;
+      case 'Add to waitlist':
+        print('Add to waitlist');
+        break;
+      case 'Save':
+        print('Save');
+        break;
+    }
+  }
 
   @override
   void initState() {
@@ -98,10 +116,17 @@ class _TopSongState extends State<TopSong> {
                 ),
               ],
             ),
-            IconButton(
-              onPressed: () {},
+            PopupMenuButton(
+              onSelected: onSelectMenu,
+              itemBuilder: (context) {
+                return menuItems.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
               icon: const Icon(Icons.more_vert),
-              splashRadius: 25,
             ),
           ],
         ),
