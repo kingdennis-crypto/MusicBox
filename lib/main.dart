@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicbox/home.dart';
+import 'package:musicbox/playlist.dart';
 
 class Music {
   String title;
@@ -17,9 +18,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'MusicBox - Music Mobile App',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFFAFAFA),
+          elevation: 1,
+          titleTextStyle: TextStyle(
+            color: Colors.deepPurple,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       home: HomeScreen(),
+      // home: PlaylistScreen(),
     );
   }
 }

@@ -72,28 +72,26 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            // icon: const Icon(CupertinoIcons.gear),
             icon: const Icon(Icons.settings),
             color: const Color(0xFF36375A),
           )
         ],
         leadingWidth: 150,
-        backgroundColor: const Color(0xFFFAFAFA),
-        elevation: 1,
         leading: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: const [
             Icon(
               CupertinoIcons.music_albums_fill,
-              color: Color(0xFF9D5DAA),
+              color: Colors.deepPurple,
             ),
             Text(
               "MusicBox",
               style: TextStyle(
-                  color: Color(0xFF9D5DAA),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                color: Colors.deepPurple,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
