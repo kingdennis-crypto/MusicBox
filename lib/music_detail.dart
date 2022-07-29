@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:get/get.dart';
+import 'package:musicbox/store_controller.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -17,9 +19,10 @@ class MusicDetailScreen extends StatefulWidget {
 
 class _MusicDetailScreenState extends State<MusicDetailScreen>
     with TickerProviderStateMixin {
+  final storeController = Get.put(StoreController());
+
   double sliderValue = 10;
   bool _isFavorite = false;
-  bool _isPlaying = false;
 
   bool _isShuffle = false;
   int _repeatStatus = 0;
@@ -103,15 +106,17 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AnimatedScale(
-                scale: _isPlaying ? 1 : 0.75,
+                scale: storeController.isPlaying.value ? 1 : 0.75,
                 duration: const Duration(milliseconds: 200),
-                curve: _isPlaying ? Curves.easeOutCubic : Curves.easeInCubic,
+                curve: storeController.isPlaying.value
+                    ? Curves.easeOutCubic
+                    : Curves.easeInCubic,
                 child: AspectRatio(
                   aspectRatio: 1 / 1,
                   child: Material(
                     elevation: 10,
                     borderRadius: BorderRadius.circular(10),
-                    shadowColor: Colors.deepPurpleAccent, 
+                    shadowColor: Colors.deepPurpleAccent,
                     clipBehavior: Clip.hardEdge,
                     child: Container(
                       width: MediaQuery.of(context).size.width - 20,
@@ -137,26 +142,19 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  // SizedBox(
-                  //   width: 300,
-                  //   height: 50,
-                  //   child: Marquee(
-                  //     text: widget.title,
-                  //     style: const TextStyle(
-                  //       fontSize: 28,
-                  //       fontWeight: FontWeight.w500,
-                  //     ),
-                  //     blankSpace: 20,
-                  //   ),
-                  // ),
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        _isFavorite = !_isFavorite;
+                        if (storeController.favoriteSongs
+                            .contains(widget.title)) {
+                          storeController.removeFavoriteSong(widget.title);
+                        } else {
+                          storeController.addFavoriteSong(widget.title);
+                        }
                       });
                     },
                     splashRadius: 25,
-                    icon: _isFavorite
+                    icon: storeController.favoriteSongs.contains(widget.title)
                         ? const Icon(Icons.favorite,
                             size: 28, color: Colors.red)
                         : const Icon(Icons.favorite_outline,
@@ -212,10 +210,11 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        _isPlaying = !_isPlaying;
+                        storeController
+                            .updateIsPlaying(!storeController.isPlaying.value);
                       });
                     },
-                    icon: _isPlaying
+                    icon: storeController.isPlaying.value
                         ? const Icon(CupertinoIcons.pause_fill)
                         : const Icon(CupertinoIcons.play_fill),
                   ),
