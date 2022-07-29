@@ -37,6 +37,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   http: ^0.13.4
   marquee: ^2.2.3
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:
