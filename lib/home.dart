@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,24 +75,29 @@ class _HomeScreenState extends State<HomeScreen> {
             color: const Color(0xFF36375A),
           )
         ],
-        leadingWidth: 150,
-        leading: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Icon(
-              CupertinoIcons.music_albums_fill,
-              color: Colors.deepPurple,
+        leadingWidth: 200,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 140),
+          child: OverflowBox(
+            maxWidth: 240,
+            child: Row(
+              children: const [
+                Icon(
+                  CupertinoIcons.cube_box,
+                  color: Colors.deepPurple,
+                ),
+                SizedBox(width: 4),
+                Text(
+                  "MusicBox",
+                  style: TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              "MusicBox",
-              style: TextStyle(
-                color: Colors.deepPurple,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
       body: FutureBuilder(
