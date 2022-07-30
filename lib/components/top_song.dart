@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:musicbox/music_detail.dart';
 
 class TopSong extends StatefulWidget {
@@ -21,6 +24,7 @@ class TopSong extends StatefulWidget {
 
 class _TopSongState extends State<TopSong> {
   Color placeColor = Colors.black;
+  final int _imageNum = Random().nextInt(58);
 
   var menuItems = <String>['Play', 'Add to waitlist', 'Save'];
 
@@ -79,13 +83,23 @@ class _TopSongState extends State<TopSong> {
           children: [
             Row(
               children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
+                Stack(
+                  children: [
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF06083D),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      'assets/albumCover/misc-$_imageNum.svg',
+                      width: 60,
+                      height: 60,
+                      color: Colors.white,
+                    ),
+                  ],
                 ),
                 const SizedBox(width: 10),
                 Column(

@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:musicbox/music_detail.dart';
 
 class Album extends StatefulWidget {
@@ -14,6 +17,7 @@ class Album extends StatefulWidget {
 
 class _AlbumState extends State<Album> {
   double _size = 1;
+  final int _imageNum = Random().nextInt(18);
 
   void shrinkCard() {
     setState(() {
@@ -56,13 +60,23 @@ class _AlbumState extends State<Album> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
+                Stack(
+                  children: [
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF06083D),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      'assets/albumCover/circle-$_imageNum.svg',
+                      width: 150,
+                      height: 150,
+                      color: Colors.white,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 5),
                 SizedBox(
