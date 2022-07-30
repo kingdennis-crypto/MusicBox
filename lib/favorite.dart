@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:musicbox/components/album.dart';
 import 'package:musicbox/store_controller.dart';
 
 class FavoriteScreen extends StatefulWidget {
@@ -19,16 +20,26 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         title: const Text("Favorites"),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+            top: 20, bottom: MediaQuery.of(context).padding.bottom),
         child: Column(
-          children: <Widget>[
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) =>
-                  Text(storeController.favoriteSongs[index]),
-              separatorBuilder: (context, index) => const SizedBox(height: 5),
-              itemCount: storeController.favoriteSongs.length,
-            )
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 5,
+                ),
+                itemCount: storeController.favoriteSongs.length,
+                itemBuilder: (context, index) => Album(
+                  albumName: storeController.favoriteSongs[index],
+                  artistName: "artistName",
+                ),
+              ),
+            ),
           ],
         ),
       ),
