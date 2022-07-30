@@ -124,8 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _albumRow(String title, List<Music> musicList) {
-    final random = Random();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -143,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => Album(
-              albumName: musicList[random.nextInt(musicList.length)].title,
-              artistName: musicList[random.nextInt(musicList.length)].artist,
+              albumName: musicList[index].title,
+              artistName: musicList[index].artist,
             ),
             separatorBuilder: (context, index) => const SizedBox(width: 10),
             itemCount: musicList.length,
