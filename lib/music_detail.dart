@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
 import 'package:get/get.dart';
-import 'package:musicbox/components/up_next_song.dart';
 import 'package:musicbox/store_controller.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
