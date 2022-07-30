@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:musicbox/home.dart';
 import 'package:musicbox/playlist.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
-  List<Widget> _pages = [HomeScreen(), PlaylistScreen()];
+  final List<Widget> _pages = [const HomeScreen(), const PlaylistScreen()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -33,7 +34,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'MusicBox - Music Mobile App',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
@@ -48,6 +49,7 @@ class _MyAppState extends State<MyApp> {
           actionsIconTheme: IconThemeData(
             color: Colors.deepPurple,
           ),
+            iconTheme: IconThemeData(color: Colors.deepPurple)
         ),
       ),
       home: Scaffold(
