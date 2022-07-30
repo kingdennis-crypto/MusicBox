@@ -38,13 +38,17 @@ class _AlbumState extends State<Album> {
           context,
           MaterialPageRoute(
             fullscreenDialog: true,
-            builder: (context) => MusicDetailScreen(artist: widget.artistName, title: widget.albumName,),
+            builder: (context) => MusicDetailScreen(
+              artist: widget.artistName,
+              title: widget.albumName,
+            ),
           ),
         );
       },
       behavior: HitTestBehavior.translucent,
       child: IgnorePointer(
         child: Container(
+          alignment: Alignment.center,
           constraints: const BoxConstraints(maxWidth: 150),
           child: Transform.scale(
             alignment: Alignment.topCenter,
