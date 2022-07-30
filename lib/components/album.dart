@@ -17,7 +17,7 @@ class Album extends StatefulWidget {
 
 class _AlbumState extends State<Album> {
   double _size = 1;
-  final int _imageNum = Random().nextInt(18);
+  final int _imageNum = Random().nextInt(38);
 
   void shrinkCard() {
     setState(() {
@@ -71,7 +71,7 @@ class _AlbumState extends State<Album> {
                       ),
                     ),
                     SvgPicture.asset(
-                      'assets/albumCover/circle-$_imageNum.svg',
+                      'assets/illustrations/illustration-$_imageNum.svg',
                       width: 150,
                       height: 150,
                       color: Colors.white,

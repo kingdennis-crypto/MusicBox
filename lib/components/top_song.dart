@@ -24,7 +24,7 @@ class TopSong extends StatefulWidget {
 
 class _TopSongState extends State<TopSong> {
   Color placeColor = Colors.black;
-  final int _imageNum = Random().nextInt(58);
+  final int _imageNum = Random().nextInt(38);
 
   var menuItems = <String>['Play', 'Add to waitlist', 'Save'];
 
@@ -94,10 +94,9 @@ class _TopSongState extends State<TopSong> {
                       ),
                     ),
                     SvgPicture.asset(
-                      'assets/albumCover/misc-$_imageNum.svg',
+                      'assets/illustrations/illustration-$_imageNum.svg',
                       width: 60,
                       height: 60,
-                      color: Colors.white,
                     ),
                   ],
                 ),
@@ -119,7 +118,8 @@ class _TopSongState extends State<TopSong> {
                       ),
                     ),
                     Text(
-                      widget.artist,
+                      // widget.artist,
+                      'assets/illustrations/illustration-$_imageNum.svg',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
