@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:get/get.dart';
+import 'package:musicbox/components/up_next_song.dart';
 import 'package:musicbox/store_controller.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -22,13 +23,38 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
   final storeController = Get.put(StoreController());
 
   double sliderValue = 10;
-  bool _isFavorite = false;
-
   bool _isShuffle = false;
   int _repeatStatus = 0;
+  int _panelIndex = 1; // 0 = Lyrics - 1 = Up Next
+
+  final List<String> _items = [
+    "Clients",
+    "Designer",
+    "Developer",
+    "Director",
+    "Employee",
+    "Manager",
+    "Worker",
+    "Owner",
+    "Deliverer",
+    "Cashier",
+  ];
+
+  final List<String> menuItems = ['Add to playlist', 'Add to waitlist'];
 
   void goBack() {
     Navigator.pop(context);
+  }
+
+  void onSelectMenu(item) {
+    switch (item) {
+      case 'Add to playlist':
+        print('Add to playlist');
+        break;
+      case 'Add to waitlist':
+        print('Add to waitlist');
+        break;
+    }
   }
 
   final PanelController _panelController = PanelController();
@@ -55,10 +81,17 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
           icon: const Icon(CupertinoIcons.chevron_down),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
+          PopupMenuButton(
+            onSelected: onSelectMenu,
+            itemBuilder: (context) {
+              return menuItems.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
             icon: const Icon(Icons.more_horiz),
-            splashRadius: 25,
           )
         ],
         backgroundColor: const Color(0xFFFAFAFA),
@@ -131,7 +164,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                 children: <Widget>[
                   // TODO: Search for an auto scroll text that only scrolls if the text is to large
                   SizedBox(
-                    width: 300,
+                    // width: 300,
                     child: Text(
                       widget.title,
                       style: const TextStyle(
@@ -142,24 +175,40 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        if (storeController.favoriteSongs
-                            .contains(widget.title)) {
-                          storeController.removeFavoriteSong(widget.title);
-                        } else {
-                          storeController.addFavoriteSong(widget.title);
-                        }
-                      });
-                    },
-                    splashRadius: 25,
-                    icon: storeController.favoriteSongs.contains(widget.title)
-                        ? const Icon(Icons.favorite,
-                            size: 28, color: Colors.red)
-                        : const Icon(Icons.favorite_outline,
-                            size: 28, color: Colors.red),
-                  )
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          // setState(() {
+                          //   _panelIndex = 1;
+                          // });
+                          _panelController.open();
+                        },
+                        splashRadius: 25,
+                        icon: const Icon(CupertinoIcons.list_number),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (storeController.favoriteSongs
+                                .contains(widget.title)) {
+                              storeController.removeFavoriteSong(widget.title);
+                            } else {
+                              storeController.addFavoriteSong(widget.title);
+                            }
+                          });
+                        },
+                        splashRadius: 25,
+                        icon: Icon(
+                          storeController.favoriteSongs.contains(widget.title)
+                              ? Icons.favorite
+                              : Icons.favorite_outline,
+                          size: 28,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               Text(widget.artist),
@@ -233,19 +282,12 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                         _repeatStatus++;
                       });
                     },
-                    icon: _repeatStatus == 2
-                        ? Icon(
-                            CupertinoIcons.repeat_1,
-                            color: _repeatStatus == 0
-                                ? Colors.black
-                                : Colors.purple,
-                          )
-                        : Icon(
-                            CupertinoIcons.repeat,
-                            color: _repeatStatus == 0
-                                ? Colors.black
-                                : Colors.purple,
-                          ),
+                    icon: Icon(
+                      _repeatStatus == 2
+                          ? CupertinoIcons.repeat_1
+                          : CupertinoIcons.repeat,
+                      color: _repeatStatus == 0 ? Colors.black : Colors.purple,
+                    ),
                   ),
                 ],
               ),
@@ -257,21 +299,54 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
   }
 
   Widget _panel() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-          20, 20, 20, MediaQuery.of(context).padding.bottom),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Lyrics",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _panelIndex = 0;
+                      });
+                    },
+                    child: Text(
+                      "Lyrics",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            _panelIndex == 0 ? Colors.blue : Colors.blue[200],
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _panelIndex = 1;
+                      });
+                    },
+                    child: Text(
+                      "Up Next",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            _panelIndex == 1 ? Colors.blue : Colors.blue[200],
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Material(
                 color: Colors.transparent,
+                borderRadius: BorderRadius.circular(6),
+                clipBehavior: Clip.hardEdge,
                 child: IconButton(
                   onPressed: () {
                     // FIXME: Sometimes when the panel is opened the close button does not work.
@@ -283,26 +358,86 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
               )
             ],
           ),
-          const Divider(),
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    _lyrics,
-                    style: const TextStyle(
-                        height: 1.6,
-                        wordSpacing: 2,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
+        ),
+        const Divider(),
+        // _lyricsWidget()
+        _panelIndex == 0 ? _lyricsWidget() : _upNext()
+      ],
+    );
+  }
+
+  Widget _lyricsWidget() {
+    return Expanded(
+      child: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+                20, 5, 20, MediaQuery.of(context).padding.bottom),
+            child: Text(
+              _lyrics,
+              style: const TextStyle(
+                height: 1.6,
+                wordSpacing: 2,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _upNext() {
+    // final List<int> items = List<int>.generate(50, (int index) => index);
+
+    void reorderData(int oldIndex, int newIndex) {
+      setState(() {
+        if (newIndex > oldIndex) {
+          newIndex -= 1;
+        }
+
+        final String item = _items.removeAt(oldIndex);
+        _items.insert(newIndex, item);
+      });
+    }
+
+    return Expanded(
+      child: ReorderableListView.builder(
+        buildDefaultDragHandles: true,
+        header: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text('This is the header'),
+        ),
+        footer: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text('End of the list'),
+        ),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        onReorder: reorderData,
+        itemCount: _items.length,
+        itemBuilder: (context, index) => ListTile(
+          key: ValueKey(_items[index]),
+          title: Text(_items[index]),
+          subtitle: const Text('Subtitle'),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+          leading: AspectRatio(
+            aspectRatio: 1 / 1,
+            child: Material(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
+          trailing: ReorderableDragStartListener(
+            index: index,
+            child: const Icon(Icons.drag_handle),
+          ),
+        ),
+        proxyDecorator: (child, index, animation) => Material(
+          elevation: 20,
+          child: child,
+        ),
       ),
     );
   }
