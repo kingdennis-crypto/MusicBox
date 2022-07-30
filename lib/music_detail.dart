@@ -151,7 +151,13 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                     clipBehavior: Clip.hardEdge,
                     child: Container(
                       width: MediaQuery.of(context).size.width - 20,
-                      color: Colors.deepPurple,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF06083D),
+                        image: DecorationImage(
+                          image: AssetImage('assets/ttten.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ),
