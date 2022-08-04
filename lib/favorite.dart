@@ -15,11 +15,43 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen> {
   final storeController = Get.put(StoreController());
 
+  final List<String> menuItems = ['Sort A-Z', 'Sort Z-A'];
+
+  void onSelectMenu(item) {
+    switch (item) {
+      case 'Sort A-Z':
+        setState(() {
+          storeController.sortSongsAZ();
+        });
+        break;
+      case 'Sort Z-A':
+        setState(() {
+          storeController.sortSongsZA();
+        });
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Favorites"),
+        actions: [
+          PopupMenuButton(
+            enabled: storeController.favoriteSongs.isEmpty ? false : true,
+            onSelected: onSelectMenu,
+            itemBuilder: (context) {
+              return menuItems.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+            icon: const Icon(Icons.sort),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(
@@ -71,8 +103,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         ),
         itemCount: storeController.favoriteSongs.length,
         itemBuilder: (context, index) => Album(
-          albumName: storeController.favoriteSongs[index],
-          artistName: "artistName",
+          albumName: storeController.favoriteSongs[index].title,
+          artistName: storeController.favoriteSongs[index].artist,
         ),
       ),
     );
