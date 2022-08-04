@@ -1,6 +1,9 @@
+// Packages
+import 'package:get/route_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+
+// Screens
 import 'package:musicbox/home.dart';
 import 'package:musicbox/playlist.dart';
 
