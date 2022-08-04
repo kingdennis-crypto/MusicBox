@@ -69,7 +69,6 @@ flutter:
   assets:
     - assets/bbburst.png
     - assets/ttten.png
-    - assets/albumCover/
     - assets/illustrations/
     - assets/empty_favorite.svg
 
