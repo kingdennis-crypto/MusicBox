@@ -10,8 +10,16 @@ import 'package:musicbox/playlist.dart';
 class Music {
   String title;
   String artist;
+  List songs = <Music>[];
 
   Music({required this.title, required this.artist});
+}
+
+class Playlist {
+  String name;
+  String description;
+
+  Playlist({required this.name, required this.description});
 }
 
 void main() {
@@ -41,19 +49,18 @@ class _MyAppState extends State<MyApp> {
       title: 'MusicBox - Music Mobile App',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFFAFAFA),
-          elevation: 1,
-          centerTitle: false,
-          titleTextStyle: TextStyle(
-            color: Colors.deepPurple,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-          actionsIconTheme: IconThemeData(
-            color: Colors.deepPurple,
-          ),
-            iconTheme: IconThemeData(color: Colors.deepPurple)
-        ),
+            backgroundColor: Color(0xFFFAFAFA),
+            elevation: 1,
+            centerTitle: false,
+            titleTextStyle: TextStyle(
+              color: Colors.deepPurple,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            actionsIconTheme: IconThemeData(
+              color: Colors.deepPurple,
+            ),
+            iconTheme: IconThemeData(color: Colors.deepPurple)),
       ),
       home: Scaffold(
         body: IndexedStack(

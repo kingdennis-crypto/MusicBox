@@ -58,112 +58,62 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   Widget _favoriteCard() {
     return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Material(
-          clipBehavior: Clip.hardEdge,
-          child: AspectRatio(
-            aspectRatio: 21 / 9,
-            child: Material(
-              color: const Color(0xFF06083D),
-              borderRadius: BorderRadius.circular(6),
-              clipBehavior: Clip.hardEdge,
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/bbburst.png'),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topLeft,
-                  ),
+      padding: const EdgeInsets.all(20),
+      child: Material(
+        clipBehavior: Clip.hardEdge,
+        child: AspectRatio(
+          aspectRatio: 21 / 9,
+          child: Material(
+            color: const Color(0xFF06083D),
+            borderRadius: BorderRadius.circular(6),
+            clipBehavior: Clip.hardEdge,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bbburst.png'),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topLeft,
                 ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FavoriteScreen(),
-                      ),
-                    );
-                  },
-                  child: const Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        "Favorites",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
-                      ),
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FavoriteScreen(),
+                    ),
+                  );
+                },
+                child: const Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      "Favorites",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        )
-
-        // child: AspectRatio(
-        //   aspectRatio: 21 / 9,
-        //   child: Material(
-        //     color: Colors.deepPurple,
-        //     borderRadius: BorderRadius.circular(10),
-        //     clipBehavior: Clip.hardEdge,
-        //     child: svg,
-        //   child: InkWell(
-        //     onTap: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: (context) => const FavoriteScreen(),
-        //         ),
-        //       );
-        //     },
-        //     child: const Align(
-        //       alignment: Alignment.bottomRight,
-        //       child: Padding(
-        //         padding: EdgeInsets.all(10),
-        //         child: Text(
-        //           "Favorites",
-        //           style: TextStyle(
-        //             color: Colors.white,
-        //             fontSize: 22,
-        //             fontWeight: FontWeight.bold,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        //   ),
-        // ),
-        );
+        ),
+      ),
+    );
   }
 
   Widget _playlistColumn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: Text(
-            "Playlists",
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
-          ),
-        ),
-        SizedBox(height: 10),
-        Playlist(),
-        Divider(
-          height: 0,
-          indent: 130,
-        ),
-        Playlist(),
-        Divider(
-          height: 0,
-          indent: 130,
-        ),
-        Playlist(),
-      ],
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: storeController.playlists.length,
+      separatorBuilder: (context, index) =>
+          const Divider(height: 0, indent: 130),
+      itemBuilder: (context, index) =>
+          PlaylistCard(name: storeController.playlists[index].name),
     );
   }
 }

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class Playlist extends StatefulWidget {
-  const Playlist({Key? key}) : super(key: key);
+class PlaylistCard extends StatefulWidget {
+  const PlaylistCard({Key? key, required this.name}) : super(key: key);
+
+  final String name;
 
   @override
-  State<Playlist> createState() => _PlaylistState();
+  State<PlaylistCard> createState() => _PlaylistCardState();
 }
 
-class _PlaylistState extends State<Playlist> {
+class _PlaylistCardState extends State<PlaylistCard> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -30,7 +32,7 @@ class _PlaylistState extends State<Playlist> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Text("Title of playlist"),
+                  Text(widget.name),
                 ],
               ),
               const Icon(
