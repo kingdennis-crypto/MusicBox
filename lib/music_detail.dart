@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:musicbox/main.dart';
 import 'package:musicbox/store_controller.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -193,18 +194,31 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                       ),
                       IconButton(
                         onPressed: () {
+                          // Checks if there is a Music instance in the list with the title
+                          final bool favoriteExist = storeController
+                              .favoriteSongs
+                              .where((element) => element.title == widget.title)
+                              .isNotEmpty;
+
                           setState(() {
-                            if (storeController.favoriteSongs
-                                .contains(widget.title)) {
-                              storeController.removeFavoriteSong(widget.title);
+                            if (favoriteExist) {
+                              storeController.favoriteSongs.removeAt(
+                                  storeController.favoriteSongs.indexWhere(
+                                      (element) =>
+                                          element.title == widget.title));
                             } else {
-                              storeController.addFavoriteSong(widget.title);
+                              storeController.favoriteSongs.add(Music(
+                                  title: widget.title, artist: widget.artist));
                             }
                           });
                         },
                         splashRadius: 25,
                         icon: Icon(
-                          storeController.favoriteSongs.contains(widget.title)
+                          storeController.favoriteSongs
+                                  .where(
+                                    (element) => element.title == widget.title,
+                                  )
+                                  .isNotEmpty
                               ? Icons.favorite
                               : Icons.favorite_outline,
                           size: 28,
