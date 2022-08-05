@@ -71,6 +71,7 @@ flutter:
     - assets/ttten.png
     - assets/illustrations/
     - assets/empty_favorite.svg
+    - assets/empty_playlist.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
