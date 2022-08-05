@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Chant",
+    "artist": "Macklemore & Tones And I",
+    "runTime": "334",
+    "hex": "34568B"
+  },
+  {
+    "name": "12345",
+    "artist": "Em Beihold",
+    "runTime": "223",
+    "hex": "FF6F61"
+  },
+  {
+    "name": "Happier Than Ever",
+    "artist": "Kelly Clarkson",
+    "runTime": "231",
+    "hex": "6B5B95"
+  },
+  {
+    "name": "I Want It All",
+    "artist": "The Script",
+    "runTime": "432",
+    "hex": "88B04B"
+  },
+  {
+    "name": "Human (Deluxe)",
+    "artist": "One Republic",
+    "runTime": "345",
+    "hex": "45B8AC"
+  }
+]

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:musicbox/components/add_playlist.dart';
+import 'package:musicbox/screens/add_playlist.dart';
 import 'package:musicbox/components/playlist_card.dart';
-import 'package:musicbox/favorite.dart';
+import 'package:musicbox/screens/favorite.dart';
 import 'package:musicbox/store_controller.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -91,9 +91,10 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     child: Text(
                       "Favorites",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -106,14 +107,19 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   }
 
   Widget _playlistColumn() {
+    void pressButton() {
+      print('HELLO');
+    }
+
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: storeController.playlists.length,
       separatorBuilder: (context, index) =>
           const Divider(height: 0, indent: 130),
-      itemBuilder: (context, index) =>
-          PlaylistCard(name: storeController.playlists[index].name),
+      itemBuilder: (context, index) => PlaylistCard(
+        name: storeController.playlists[index].name,
+      ),
     );
   }
 }

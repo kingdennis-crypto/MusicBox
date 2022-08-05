@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:musicbox/music_detail.dart';
+import 'package:musicbox/screens/music_detail.dart';
 
 class Album extends StatefulWidget {
   const Album({Key? key, required this.albumName, required this.artistName})
@@ -68,37 +68,45 @@ class _AlbumState extends State<Album> {
                       decoration: BoxDecoration(
                         color: const Color(0xFF06083D),
                         borderRadius: BorderRadius.circular(6),
+                        // color:
+                        //     Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                        //         .withOpacity(1.0)
                       ),
                     ),
-                    SvgPicture.asset(
-                      'assets/illustrations/illustration-$_imageNum.svg',
-                      width: 150,
-                      height: 150,
-                      color: Colors.white,
-                    ),
+                    // SvgPicture.asset(
+                    //   'assets/illustrations/illustration-$_imageNum.svg',
+                    //   width: 150,
+                    //   height: 150,
+                    //   // color: Colors.white,
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 5),
                 SizedBox(
                   width: 150,
-                  child: Text(
-                    widget.albumName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.albumName,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        widget.artistName,
+                        style: const TextStyle(
+                          color: Colors.black45,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        // softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                ),
-                Text(
-                  widget.artistName,
-                  style: const TextStyle(
-                    color: Colors.black45,
-                    fontWeight: FontWeight.w300,
-                  ),
-                  // softWrap: false,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

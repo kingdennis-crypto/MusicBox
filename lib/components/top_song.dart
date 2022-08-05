@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:musicbox/music_detail.dart';
+import 'package:musicbox/screens/music_detail.dart';
 
 class TopSong extends StatefulWidget {
   const TopSong(
@@ -93,11 +93,11 @@ class _TopSongState extends State<TopSong> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
-                    SvgPicture.asset(
-                      'assets/illustrations/illustration-$_imageNum.svg',
-                      width: 60,
-                      height: 60,
-                    ),
+                    // SvgPicture.asset(
+                    //   'assets/illustrations/illustration-$_imageNum.svg',
+                    //   width: 60,
+                    //   height: 60,
+                    // ),
                   ],
                 ),
                 const SizedBox(width: 10),
@@ -118,8 +118,8 @@ class _TopSongState extends State<TopSong> {
                       ),
                     ),
                     Text(
-                      // widget.artist,
-                      'assets/illustrations/illustration-$_imageNum.svg',
+                      widget.artist,
+                      // 'assets/illustrations/illustration-$_imageNum.svg',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,

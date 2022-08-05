@@ -76,16 +76,16 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           ),
           const SizedBox(height: 20),
           const Text(
-            "You have no favorites yet.",
+            'You have no favorites yet.',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
             ),
           ),
           const Text(
-            "Please press the heart to have it favored",
+            'Please press the heart to have it favored',
             style: TextStyle(color: Colors.black54),
-          )
+          ),
         ],
       ),
     );

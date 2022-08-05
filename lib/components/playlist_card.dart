@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:musicbox/screens/playlist_detail.dart';
 
 class PlaylistCard extends StatefulWidget {
   const PlaylistCard({Key? key, required this.name}) : super(key: key);
@@ -15,7 +17,14 @@ class _PlaylistCardState extends State<PlaylistCard> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlaylistDetailScreen(name: widget.name),
+            ),
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Row(

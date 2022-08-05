@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:musicbox/main.dart';
 import 'package:musicbox/components/top_song.dart';
 
-import 'components/album.dart';
+import 'package:musicbox/components/album.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

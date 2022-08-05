@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:musicbox/components/playlist_card.dart';
 import 'package:musicbox/main.dart';
 import 'package:musicbox/store_controller.dart';
 
@@ -25,6 +26,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
   bool _isShuffle = false;
   int _repeatStatus = 0;
   int _panelIndex = 1; // 0 = Lyrics - 1 = Up Next
+  late Music _selectedSong;
 
   final List<String> _items = [
     "Clients",
@@ -48,7 +50,17 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
   void onSelectMenu(item) {
     switch (item) {
       case 'Add to playlist':
-        print('Add to playlist');
+        setState(() {
+          _selectedSong = Music(title: widget.title, artist: widget.artist);
+        });
+
+        Navigator.of(context).push(
+          CupertinoPageRoute(
+            builder: (context) => _choosePlaylist(),
+            fullscreenDialog: true,
+          ),
+        );
+
         break;
       case 'Add to waitlist':
         print('Add to waitlist');
@@ -169,7 +181,7 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                 children: <Widget>[
                   // TODO: Search for an auto scroll text that only scrolls if the text is to large
                   SizedBox(
-                    // width: 300,
+                    width: 250,
                     child: Text(
                       widget.title,
                       style: const TextStyle(
@@ -184,9 +196,6 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
                     children: [
                       IconButton(
                         onPressed: () {
-                          // setState(() {
-                          //   _panelIndex = 1;
-                          // });
                           _panelController.open();
                         },
                         splashRadius: 25,
@@ -202,13 +211,11 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
 
                           setState(() {
                             if (favoriteExist) {
-                              storeController.favoriteSongs.removeAt(
-                                  storeController.favoriteSongs.indexWhere(
-                                      (element) =>
-                                          element.title == widget.title));
+                              storeController.removeFavoriteSong(
+                                  widget.title, widget.artist);
                             } else {
-                              storeController.favoriteSongs.add(Music(
-                                  title: widget.title, artist: widget.artist));
+                              storeController.addFavoriteSong(
+                                  widget.title, widget.artist);
                             }
                           });
                         },
@@ -456,6 +463,50 @@ class _MusicDetailScreenState extends State<MusicDetailScreen>
           elevation: 20,
           child: child,
         ),
+      ),
+    );
+  }
+
+  Widget _choosePlaylist() {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Select playlist'),
+      ),
+      body: SingleChildScrollView(
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) =>
+              _playlistCard(storeController.playlists[index].name),
+          separatorBuilder: (context, index) =>
+              const Divider(height: 0, endIndent: 20, indent: 20),
+          itemCount: storeController.playlists.length,
+        ),
+      ),
+    );
+  }
+
+  Widget _playlistCard(String name) {
+    void _addToPlaylist() {
+      // TODO: Add try catch for if the song is succesfully added
+      storeController.addSongToPlaylist(_selectedSong, name);
+
+      Navigator.of(context).pop();
+
+      Get.snackbar(
+        'Succesfully added to $name',
+        '${_selectedSong.title} by ${_selectedSong.artist}',
+        icon: const Icon(Icons.info),
+        snackPosition: SnackPosition.BOTTOM,
+        shouldIconPulse: false,
+      );
+    }
+
+    return InkWell(
+      onTap: _addToPlaylist,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Text(name),
       ),
     );
   }

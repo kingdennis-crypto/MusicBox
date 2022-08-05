@@ -4,23 +4,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Screens
-import 'package:musicbox/home.dart';
-import 'package:musicbox/playlist.dart';
+import 'package:musicbox/screens/home.dart';
+import 'package:musicbox/screens/playlist.dart';
 
 class Music {
   String title;
   String artist;
-  List songs = <Music>[];
 
   Music({required this.title, required this.artist});
 }
 
 class Playlist {
-  String name;
-  String description;
+  final String name;
+  final String description;
+  final List<Music> songs;
 
-  Playlist({required this.name, required this.description});
+  Playlist(
+      {required this.name, required this.description, required this.songs});
+
+  // void addSong(Music song) {
+  //   songs.add(song);
+  // }
 }
+
+// Color Palette 667
+// #F55C44
+// #2C51A2
+// #2C9B95
+// #F6B139
+// #FFBBB9
 
 void main() {
   runApp(const MyApp());
