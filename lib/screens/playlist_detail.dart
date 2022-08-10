@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:musicbox/main.dart';
 import 'package:musicbox/store_controller.dart';
 
@@ -17,9 +20,13 @@ class PlaylistDetailScreen extends StatefulWidget {
 
 class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
   final storeController = Get.put(StoreController());
+  final ImagePicker _imagePicker = ImagePicker();
+
+  String imagePath = "";
 
   late Playlist playlist;
   late List<Music> songs;
+  late File image;
 
   bool _isEditing = false;
 
@@ -73,8 +80,12 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            _playlistIllustration(),
+            _playlistName(),
+            const SizedBox(height: 10),
+            const Divider(indent: 10, endIndent: 10),
             playlist.songs.isEmpty ? _emptyPlaylist() : _filledPlaylist(),
           ],
         ),
@@ -82,9 +93,79 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
     );
   }
 
+  Widget _playlistIllustration() {
+    void _selectImage() async {
+      // final XFile? _image =
+      //     await _imagePicker.pickImage(source: ImageSource.gallery);
+
+      // // FIXME: The image after getting selected does not load.
+      // setState(() {
+      //   imagePath = _image!.path;
+      //   image = _image as File;
+      // });
+
+      print('Selecting image');
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Center(
+        child: FractionallySizedBox(
+          widthFactor: 0.6,
+          child: AspectRatio(
+            aspectRatio: 1 / 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.purple,
+                borderRadius: BorderRadius.circular(6),
+                // image: imagePath.isEmpty
+                //     ? DecorationImage(image: AssetImage(imagePath))
+                //     : null,
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: _isEditing
+                  ? Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: _selectImage,
+                        child: Center(
+                          child: Material(
+                            color: Colors.white.withOpacity(0.4),
+                            shape: const CircleBorder(),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(
+                                Icons.edit,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _playlistName() {
+    return Column(
+      children: <Widget>[
+        Text(
+          playlist.name,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+        ),
+        Text(playlist.description),
+      ],
+    );
+  }
+
   Widget _filledPlaylist() {
     return ReorderableListView(
       shrinkWrap: true,
+      buildDefaultDragHandles: true,
       physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
         for (int index = 0; index < playlist.songs.length; index++)
@@ -131,64 +212,88 @@ class _PlaylistDetailScreenState extends State<PlaylistDetailScreen> {
   }
 
   Widget _number(Music song, int index) {
-    bool _isFavorite = storeController.favoriteSongs
+    bool isFavorite = storeController.favoriteSongs
         .where((element) => element.title == song.title)
         .isNotEmpty;
 
     final List<String> menuItems = [
       'Add to playlist',
       'Share',
-      _isFavorite ? 'Remove favorite' : 'Add favorite',
+      isFavorite ? 'Remove favorite' : 'Add favorite',
     ];
 
     void onSelectMenu(item) {
       switch (item) {
+        // TODO: Add functionality to add to a playlist
         case 'Add to playlist':
           print('Add to playlist');
           break;
+        // TODO: Open share sheet
         case 'Share':
           print('Share');
           break;
       }
     }
 
-    return Container(
+    return Dismissible(
       key: ValueKey(index),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 64,
-            height: 64,
-            padding: const EdgeInsets.all(8),
-            child: const Card(
-              color: Colors.blue,
-              elevation: 2,
+      background: Container(
+        color: Colors.red,
+        child: const Padding(
+          padding: EdgeInsets.only(right: 20),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
             ),
           ),
-          Text(song.title),
-          const Expanded(child: SizedBox()),
-          _isEditing
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: ReorderableDragStartListener(
-                    index: index,
-                    child: const Icon(CupertinoIcons.line_horizontal_3),
-                  ),
-                )
-              : PopupMenuButton(
-                  onSelected: onSelectMenu,
-                  icon: const Icon(Icons.more_vert),
-                  splashRadius: 25,
-                  itemBuilder: (context) {
-                    return menuItems.map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      );
-                    }).toList();
-                  },
+        ),
+      ),
+      direction: DismissDirection.endToStart,
+      child: IgnorePointer(
+        // ignoring: !_isEditing, // If editing is disabled, disable drag
+        ignoring: false,
+        key: ValueKey(index),
+        child: Container(
+          key: ValueKey(index),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 64,
+                height: 64,
+                padding: const EdgeInsets.all(8),
+                child: const Card(
+                  color: Colors.blue,
+                  elevation: 2,
                 ),
-        ],
+              ),
+              Text(song.title),
+              const Expanded(child: SizedBox()),
+              _isEditing
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(CupertinoIcons.line_horizontal_3),
+                      ),
+                    )
+                  : PopupMenuButton(
+                      onSelected: onSelectMenu,
+                      icon: const Icon(Icons.more_vert),
+                      splashRadius: 25,
+                      itemBuilder: (context) {
+                        return menuItems.map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
+                      },
+                    ),
+            ],
+          ),
+        ),
       ),
     );
   }
