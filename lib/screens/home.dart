@@ -2,11 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart';
-import 'package:musicbox/main.dart';
-import 'package:musicbox/components/top_song.dart';
+import 'package:musicbox/components/home/categoryCard.dart';
+import 'package:musicbox/components/home/promoCard.dart';
+import 'package:musicbox/components/home/topEpisode.dart';
+import 'package:musicbox/types/category.dart';
+import 'package:musicbox/types/promo.dart';
+import 'package:musicbox/types/searchHint.dart';
 
-import 'package:musicbox/components/album.dart';
+// TODO: Design - https://dribbble.com/shots/19306769-Podcast-App-Mobile-Design
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,44 +21,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Music> forYou = [
-    Music(title: "Enemy (ft. JID)", artist: "Image Dragons, JID"),
-    Music(title: "Arcade", artist: "Duncan Laurence"),
-    Music(title: "Heat Waves", artist: "Glass Animals"),
-    Music(title: "This Is My World (feat. Austin Jenckes", artist: "Esterly"),
-    Music(title: "I'm Not Famous", artist: "AJR"),
-  ];
+  List<Category> categories = [];
+  List<Promo> promos = [];
+  List<SearchHint> searchHints = [];
 
-  List<Music> newReleases = [
-    Music(title: "Chant", artist: "Mzcklemore & Tones And I"),
-    Music(title: "12345", artist: "Em Beihold"),
-    Music(title: "Happier Than Ever", artist: "Kelly Clarkson"),
-    Music(title: "I Want It All", artist: "The Script"),
-    Music(title: "Human (Deluxe)", artist: "One Republic"),
-  ];
+  Future fetchData() async {
+    const String baseUrl = "https://api.audioboom.com";
 
-  List<Music> topSongs = [];
+    final fetchedData = await get(Uri.parse("$baseUrl/regions/current"));
 
-  Future fetchAlbum() async {
-    const String url =
-        "http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=02216cd94805c846c6cc6dc3b46fd1aa&format=json";
-    final response = await get(Uri.parse(url));
+    categories.clear();
+    promos.clear();
+    searchHints.clear();
 
-    if (response.statusCode == 200) {
-      var responseData = json.decode(response.body)['tracks']['track'];
+    if (fetchedData.statusCode == 200) {
+      var body = json.decode(fetchedData.body)['body'];
 
-      for (var singleAlbum in responseData) {
-        Music music = Music(
-          title: singleAlbum['name'],
-          artist: singleAlbum['artist']['name'],
-        );
-
-        topSongs.add(music);
+      for (var categoryIterate in body['categories']) {
+        categories.add(Category.fromJson(categoryIterate));
       }
 
-      return topSongs;
+      for (var promo in body['promos']) {
+        promos.add(Promo.fromJson(promo));
+      }
+
+      for (var searchHint in body['search_hints']) {
+        searchHints.add(SearchHint.fromJson(searchHint));
+      }
+
+      return categories;
     } else {
-      throw "Unable to retrieve posts.";
+      throw "Unable to retrieve categories";
     }
   }
 
@@ -61,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    fetchAlbum();
+    fetchData();
   }
 
   @override
@@ -101,22 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: FutureBuilder(
-        future: fetchAlbum(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        future: fetchData(),
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: 20,
-                  bottom: MediaQuery.of(context).padding.bottom,
-                ),
-                child: Column(
-                  children: [
-                    _albumRow("Just for you", forYou),
-                    _albumRow("New releases", newReleases),
-                    _topSongColumn(topSongs),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  categoriesScroll(),
+                  recommendedListens(),
+                  topEpisodes(),
+                ],
               ),
             );
           } else {
@@ -127,59 +119,61 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _albumRow(String title, List<Music> musicList) {
+  Widget categoriesScroll() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        const Padding(
+          padding: EdgeInsets.only(left: 10, top: 10, right: 10),
           child: Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            "Categories",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
           ),
         ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 220,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => Album(
-              albumName: musicList[index].title,
-              artistName: musicList[index].artist,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: IntrinsicWidth(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(child: CategoryCard(category: categories[0])),
+                  Expanded(child: CategoryCard(category: categories[1])),
+                  Expanded(child: CategoryCard(category: categories[2])),
+                  Expanded(child: CategoryCard(category: categories[3])),
+                  Expanded(child: CategoryCard(category: categories[4])),
+                ],
+              ),
             ),
-            separatorBuilder: (context, index) => const SizedBox(width: 10),
-            itemCount: musicList.length,
           ),
         ),
       ],
     );
   }
 
-  Widget _topSongColumn(List<Music> musicList) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            "Top songs of 2021",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+  Widget recommendedListens() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+        child: Row(
+          children: List.generate(
+            searchHints.length,
+            (index) => PromoCard(searchHint: searchHints[index]),
           ),
         ),
-        ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) => TopSong(
-            title: musicList[index].title,
-            artist: musicList[index].artist,
-            index: index + 1,
-          ),
-          // separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemCount: 50,
-        )
-      ],
+      ),
+    );
+  }
+
+  Widget topEpisodes() {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: promos.length,
+      itemBuilder: (context, index) => TopEpisode(promo: promos[index]),
     );
   }
 }

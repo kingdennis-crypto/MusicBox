@@ -9,6 +9,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:musicbox/main.dart';
 import 'package:musicbox/store_controller.dart';
 
+// TODO Fix the number rearangement without edit toggled one
+// TODO Fix the no numbers available illustration (To big)
+// TODO Add support for playlist image cover select from local photos
+// TODO Add support for editing title and description in edit mode
+// TODO When details edited and you exit edit mode, show banner to ask user if he wants to save his changes
+
+// FIXME A dismissed Dismissible widget is still part of the tree.
+
 class PlaylistDetailScreen extends StatefulWidget {
   const PlaylistDetailScreen({Key? key, required this.name}) : super(key: key);
 

@@ -47,7 +47,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [const HomeScreen(), const PlaylistScreen()];
+  final List<Widget> _pages = [
+    const HomeScreen(),
+    const PlaylistScreen(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -61,18 +64,19 @@ class _MyAppState extends State<MyApp> {
       title: 'MusicBox - Music Mobile App',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFFFAFAFA),
-            elevation: 1,
-            centerTitle: false,
-            titleTextStyle: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-            actionsIconTheme: IconThemeData(
-              color: Colors.deepPurple,
-            ),
-            iconTheme: IconThemeData(color: Colors.deepPurple)),
+          backgroundColor: Color(0xFFFAFAFA),
+          elevation: 1,
+          centerTitle: false,
+          titleTextStyle: TextStyle(
+            color: Colors.deepPurple,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          actionsIconTheme: IconThemeData(
+            color: Colors.deepPurple,
+          ),
+          iconTheme: IconThemeData(color: Colors.deepPurple),
+        ),
       ),
       home: Scaffold(
         body: IndexedStack(
@@ -82,6 +86,7 @@ class _MyAppState extends State<MyApp> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
+          selectedItemColor: Colors.deepPurple,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
