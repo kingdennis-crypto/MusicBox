@@ -12,26 +12,75 @@ class PromoCard extends StatefulWidget {
   State<PromoCard> createState() => _PromoCardState();
 }
 
-class _PromoCardState extends State<PromoCard> {
+class _PromoCardState extends State<PromoCard>
+    with SingleTickerProviderStateMixin {
+  double scale = 1.0;
+
+  late Animation<double> animation;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 50),
+    );
+
+    animation = Tween<double>(
+      begin: 1,
+      end: 0.95,
+    ).animate(controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      margin: const EdgeInsets.only(right: 10),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChannelDetailScreen(
-                  channelId: widget.searchHint.id,
-                  title: widget.searchHint.title,
-                ),
-              ),
-            );
-          },
+    return GestureDetector(
+      onTapDown: (details) {
+        controller.forward();
+        // setState(() {
+        //   scale = 0.9;
+        // });
+      },
+      onTapUp: (details) {
+        controller.reverse();
+        // setState(() {
+        //   scale = 1.0;
+        // });
+      },
+      onTapCancel: () {
+        controller.reverse();
+        // setState(() {
+        //   scale = 1.0;
+        // });
+      },
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChannelDetailScreen(
+              channelId: widget.searchHint.id,
+              title: widget.searchHint.title,
+            ),
+          ),
+        );
+      },
+      child: Transform.scale(
+        scale: animation.value,
+        child: Container(
+          width: 250,
+          margin: const EdgeInsets.only(right: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -47,7 +96,7 @@ class _PromoCardState extends State<PromoCard> {
                   width: 250,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 widget.searchHint.title,
                 overflow: TextOverflow.ellipsis,
