@@ -105,8 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
             return SingleChildScrollView(
               child: Column(
                 children: [
+                  sectionTitle('Categories'),
                   categoriesScroll(),
+                  sectionTitle('Recommended Podcasts'),
                   recommendedListens(),
+                  sectionTitle('Top Listens'),
                   topEpisodes(),
                 ],
               ),
@@ -119,17 +122,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
+  }
+
   Widget categoriesScroll() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-          child: Text(
-            "Categories",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-          ),
-        ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: IntrinsicWidth(
