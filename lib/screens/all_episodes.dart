@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:musicbox/components/channelDetail/episode.dart';
 import 'package:musicbox/types/audioClip.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class AllEpisodesScreen extends StatefulWidget {
   final List<AudioClip> episodeList;
+  final String cover;
+  final String title;
 
-  const AllEpisodesScreen({Key? key, required this.episodeList})
+  const AllEpisodesScreen(
+      {Key? key,
+      required this.episodeList,
+      required this.cover,
+      required this.title})
       : super(key: key);
 
   @override
@@ -31,37 +36,59 @@ class _AllEpisodesScreenState extends State<AllEpisodesScreen> {
   // }
 
   // TODO - Add header per month
+  // TODO - Add refreshindicator
+
+  // onRefresh: () {
+  //   SnackBar snackBar = const SnackBar(
+  //     content: Text("Succesfully updated the list"),
+  //   );
+
+  //   return Future.delayed(
+  //     const Duration(seconds: 1),
+  //     () {
+  //       // TODO - Call function to retrieve podcast data
+
+  //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //     },
+  //   );
+  // },
+
+  // RefreshIndicator
+  // ScrollBar
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("All Episodes"),
-      ),
-      body: RefreshIndicator(
-        child: Scrollbar(
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: widget.episodeList.length,
-            separatorBuilder: (context, index) => const Divider(height: 1),
-            itemBuilder: (context, index) =>
-                Episode(audioClip: widget.episodeList[index]),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 300.0,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: LayoutBuilder(
+                builder: (context, constraints) => Text(
+                  widget.title,
+                  textScaleFactor: 1,
+                  style: TextStyle(
+                      color: constraints.maxHeight < 100
+                          ? Colors.deepPurple
+                          : Colors.white),
+                ),
+              ),
+              background: Image.network(
+                widget.cover,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        onRefresh: () {
-          SnackBar snackBar = const SnackBar(
-            content: Text("Succesfully updated the list"),
-          );
-
-          return Future.delayed(
-            const Duration(seconds: 1),
-            () {
-              // TODO - Call function to retrieve podcast data
-
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-          );
-        },
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Episode(audioClip: widget.episodeList[index]),
+              childCount: 20,
+            ),
+          ),
+        ],
       ),
     );
   }
