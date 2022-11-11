@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:http/http.dart';
+
 import 'package:musicbox/components/channelDetail/episode.dart';
 import 'package:musicbox/screens/all_episodes.dart';
 import 'package:musicbox/types/audioClip.dart';
@@ -83,7 +84,23 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.network(channel.logo),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 15,
+                            ),
+                          ],
+                        ),
+                        child: Image.network(channel.logo),
+                      ),
+                    ),
                     channelCover(),
                     const Divider(height: 1),
                     audioList(),
@@ -103,7 +120,7 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
 
   Widget channelCover() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -115,6 +132,7 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
             ),
           ),
           Text(channel.description),
+          const SizedBox(height: 10),
           Row(
             children: <Widget>[
               Expanded(
@@ -200,7 +218,11 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AllEpisodesScreen(episodeList: audioClips),
+              builder: (context) => AllEpisodesScreen(
+                episodeList: audioClips,
+                cover: channel.logo,
+                title: widget.title,
+              ),
             ),
           );
         },
@@ -209,7 +231,10 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const <Widget>[
-              Text("Show all"),
+              Text(
+                "Show all",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
               Icon(CupertinoIcons.chevron_forward),
             ],
           ),
